@@ -26,16 +26,15 @@ jobs:
         id: package-version
         run: echo '::set-output name=VERSION::'$(node -e "console.log(require(\"./package.json\").version)")
 
-      - name: Checkout release
-        run: git checkout -b bump-v${{ steps.package-version.outputs.VERSION }}
-
       - name: Push
-        run: git push origin bump-v${{ steps.package-version.outputs.VERSION }}
+        run: git push origin head:bump-v${{ steps.package-version.outputs.VERSION }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           title: Bump to v${{ steps.package-version.outputs.VERSION }}
+          body: ""
           base: main
           branch: bump-v${{ steps.package-version.outputs.VERSION }}
+          delete-branch: true
