@@ -1,0 +1,29 @@
+name: リリース
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: develop
+          fetch-depth: 0
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+      - name: Bump Version
+        run: yarn version --patch
+
+      - name: Get Version
+        id: package-version
+        run: echo '::set-output name=VERSION::$(node -e "console.log(require('./package.json').version)")'
+
+      - name: Checkout release
+        run: git checkout -b bump-v${{ steps.package-version.outputs.VERSION }}
+
+      - name: Push
+        run: git push origin bump-v${{ steps.package-version.outputs.VERSION }}
