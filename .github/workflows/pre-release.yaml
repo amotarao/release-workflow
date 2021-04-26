@@ -40,7 +40,6 @@ jobs:
 
       - name: Checkout and Push
         env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           VERSION: ${{ steps.package-version.outputs.VERSION }}
         run: |
           git checkout -b release-v${VERSION}
