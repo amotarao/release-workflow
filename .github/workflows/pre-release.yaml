@@ -46,7 +46,7 @@ jobs:
           git push origin release-v${VERSION} -f
 
       - name: Create Pull Request
-        uses: actions/github-script@v2
+        uses: actions/github-script@v4
         env:
           VERSION: ${{ steps.package-version.outputs.VERSION }}
         with:
