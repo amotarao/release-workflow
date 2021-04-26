@@ -18,7 +18,7 @@ jobs:
       - name: Set Config
         run: |
           git config --global user.email "you@example.com"
-          git config --global user.name "Your Name"
+          git config --global user.name "Amon Sawamura"
 
       - name: Bump Version
         run: yarn version --patch
@@ -32,3 +32,11 @@ jobs:
 
       - name: Push
         run: git push origin bump-v${{ steps.package-version.outputs.VERSION }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          title: Bump v${{ steps.package-version.outputs.VERSION }}
+          base: main
+          branch: bump-v${{ steps.package-version.outputs.VERSION }}
