@@ -2,10 +2,15 @@ name: リリース準備
 
 on:
   workflow_dispatch:
+    version:
+      description: major / minor / patch
+      required: true
+      default: patch
 
 jobs:
   release:
     name: Release
+    if: github.event.inputs.version == 'major' || github.event.inputs.version == 'minor' || github.event.inputs.version == 'patch'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -26,10 +31,7 @@ jobs:
           git config --global user.name "Amon Sawamura"
 
       - name: Bump Version
-        run: yarn version --patch
-
-      - name: show log
-        run: git log --oneline
+        run: yarn version --${{ github.event.inputs.version }}
 
       - name: Get Version
         id: package-version
