@@ -43,12 +43,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
       - name: Create Pull Request
-        run: |
-          curl \
-          -X POST \
-          -H "Accept: application/vnd.github.v3+json" \
-          -u amotarao:${GITHUB_TOKEN} \
-          https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls \
-          -d '{"title":"Release: v${{ steps.package-version.outputs.VERSION }}","head":"bump-v${{ steps.package-version.outputs.VERSION }}","base":"main"}'
+        uses: actions/github-script@v2
         env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          VERSION: ${{ steps.bump_version.outputs.VERSION }}
+        with:
+          github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          script: |
+            github.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Release: v${process.env.VERSION}`,
+              body: `Bump v${process.env.VERSION}`,
+              base: 'main',
+              head: `${context.repo.owner}:release-v${process.env.VERSION}`
+            })
