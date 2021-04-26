@@ -45,7 +45,7 @@ jobs:
       - name: Create Pull Request
         uses: actions/github-script@v2
         env:
-          VERSION: ${{ steps.bump_version.outputs.VERSION }}
+          VERSION: ${{ steps.package-version.outputs.VERSION }}
         with:
           github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           script: |
