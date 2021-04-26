@@ -24,6 +24,8 @@ jobs:
         run: |
           git config --global user.email "amotarao@users.noreply.github.com"
           git config --global user.name "Amon Sawamura"
+          yarn config set version-git-tag false
+          yarn config set version-commit-hooks false
 
       - name: Bump Version
         run: yarn version --patch
@@ -35,17 +37,18 @@ jobs:
         id: package-version
         run: echo '::set-output name=VERSION::'$(node -e "console.log(require(\"./package.json\").version)")
 
-      - name: Checkout and Push
-        run: |
-          git checkout -b bump-v${{ steps.package-version.outputs.VERSION }}
-          git push origin bump-v${{ steps.package-version.outputs.VERSION }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      # - name: Checkout and Push
+      #   run: |
+      #     git checkout -b bump-v${{ steps.package-version.outputs.VERSION }}
+      #     git push origin bump-v${{ steps.package-version.outputs.VERSION }}
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          commit-message: v${{ steps.package-version.outputs.VERSION }} 
           title: Bump to v${{ steps.package-version.outputs.VERSION }}
           body: ""
           base: main
