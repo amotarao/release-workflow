@@ -51,5 +51,5 @@ jobs:
           # commit-message: v${{ steps.package-version.outputs.VERSION }} 
           title: Bump to v${{ steps.package-version.outputs.VERSION }}
           body: ""
-          # base: main
-          # branch: bump-v${{ steps.package-version.outputs.VERSION }}
+          base: main
+          branch: bump-v${{ steps.package-version.outputs.VERSION }}
