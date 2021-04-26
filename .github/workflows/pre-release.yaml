@@ -32,18 +32,19 @@ jobs:
           git config --global user.name "Amon Sawamura"
 
       - name: Bump Version
-        run: yarn version --${{ github.event.inputs.version }} --no-git-tag-version
+        run: yarn version --${{ github.event.inputs.version }}
 
       - name: Get Version
         id: package-version
         run: echo '::set-output name=VERSION::'$(node -e "console.log(require(\"./package.json\").version)")
 
       - name: Checkout and Push
-        run: |
-          git checkout -b release-v${{ steps.package-version.outputs.VERSION }}
-          git push origin release-v${{ steps.package-version.outputs.VERSION }} -f
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          VERSION: ${{ steps.package-version.outputs.VERSION }}
+        run: |
+          git checkout -b release-v${VERSION}
+          git push origin release-v${VERSION} -f
 
       - name: Create Pull Request
         uses: actions/github-script@v2
