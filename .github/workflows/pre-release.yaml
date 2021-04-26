@@ -32,7 +32,7 @@ jobs:
           git config --global user.name "Amon Sawamura"
 
       - name: Bump Version
-        run: yarn version --${{ github.event.inputs.version }}
+        run: yarn version --${{ github.event.inputs.version }} --no-git-tag-version
 
       - name: Get Version
         id: package-version
