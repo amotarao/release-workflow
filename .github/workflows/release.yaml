@@ -40,4 +40,3 @@ jobs:
           body: ""
           base: main
           branch: bump-v${{ steps.package-version.outputs.VERSION }}
-          delete-branch: true
