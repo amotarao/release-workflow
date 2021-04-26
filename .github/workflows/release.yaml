@@ -13,6 +13,7 @@ jobs:
         with:
           ref: develop
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          fetch-depth: 0
 
       - name: Set Config
         run: |
