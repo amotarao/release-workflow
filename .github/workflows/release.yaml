@@ -51,6 +51,6 @@ jobs:
           -H "Accept: application/vnd.github.v3+json" \
           -u amotarao:${GITHUB_TOKEN} \
           https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls \
-          -d '{"head":"bump-v${{ steps.package-version.outputs.VERSION }}","base":"main"}'
+          -d '{"title":"Bump to v${{ steps.package-version.outputs.VERSION }}","head":"bump-v${{ steps.package-version.outputs.VERSION }}","base":"main"}'
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
