@@ -39,11 +39,12 @@ jobs:
         run: echo '::set-output name=VERSION::'$(node -e "console.log(require(\"./package.json\").version)")
 
       - name: Checkout and Push
-        run: |
-          git checkout -b release-v${{ steps.package-version.outputs.VERSION }}
-          git push origin release-v${{ steps.package-version.outputs.VERSION }} -f
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          VERSION: ${{ steps.package-version.outputs.VERSION }}
+        run: |
+          git checkout -b release-v${VERSION}
+          git push origin release-v${VERSION} -f
 
       - name: Create Pull Request
         uses: actions/github-script@v2
