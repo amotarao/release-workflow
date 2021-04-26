@@ -23,7 +23,7 @@ jobs:
       - name: Set Config
         run: |
           git config --global user.email "amotarao@users.noreply.github.com"
-          git config --global user.name "Amon Sawamura"¥
+          git config --global user.name "Amon Sawamura"
 
       - name: Bump Version
         run: yarn version --patch
