@@ -42,11 +42,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
-      # - name: Create Pull Request
-      #   uses: peter-evans/create-pull-request@v3
-      #   with:
-      #     token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-      #     title: Bump to v${{ steps.package-version.outputs.VERSION }}
-      #     body: ""
-      #     base: main
-      #     branch: bump-v${{ steps.package-version.outputs.VERSION }}
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          title: Bump to v${{ steps.package-version.outputs.VERSION }}
+          body: ""
+          base: main
