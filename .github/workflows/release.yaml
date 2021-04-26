@@ -55,5 +55,5 @@ jobs:
       - name: Checkout, Merge and Push
         run: |
           git checkout develop
-          git merge release-v${{ steps.package-version.outputs.VERSION }}
+          git merge origin/release-v${{ steps.package-version.outputs.VERSION }}
           git push origin develop
