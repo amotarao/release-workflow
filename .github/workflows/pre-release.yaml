@@ -1,4 +1,4 @@
-name: リリース
+name: リリース準備
 
 on:
   workflow_dispatch:
