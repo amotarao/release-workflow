@@ -15,6 +15,11 @@ jobs:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           fetch-depth: 0
 
+      - name: Setup Node.js 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
       - name: Set Config
         run: |
           git config --global user.email "amotarao@users.noreply.github.com"
@@ -30,11 +35,10 @@ jobs:
         id: package-version
         run: echo '::set-output name=VERSION::'$(node -e "console.log(require(\"./package.json\").version)")
 
-      - name: Checkout release
-        run: git checkout -b bump-v${{ steps.package-version.outputs.VERSION }}
-
-      - name: Push
-        run: git push origin bump-v${{ steps.package-version.outputs.VERSION }}
+      - name: Checkout and Push
+        run: |
+          git checkout -b bump-v${{ steps.package-version.outputs.VERSION }}
+          git push origin bump-v${{ steps.package-version.outputs.VERSION }}
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
