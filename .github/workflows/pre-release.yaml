@@ -1,0 +1,59 @@
+name: リリース準備
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: develop
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Node.js 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Set Config
+        run: |
+          git config --global user.email "amotarao@users.noreply.github.com"
+          git config --global user.name "Amon Sawamura"
+
+      - name: Bump Version
+        run: yarn version --patch
+
+      - name: show log
+        run: git log --oneline
+
+      - name: Get Version
+        id: package-version
+        run: echo '::set-output name=VERSION::'$(node -e "console.log(require(\"./package.json\").version)")
+
+      - name: Checkout and Push
+        run: |
+          git checkout -b release-v${{ steps.package-version.outputs.VERSION }}
+          git push origin release-v${{ steps.package-version.outputs.VERSION }} -f
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+      - name: Create Pull Request
+        uses: actions/github-script@v2
+        env:
+          VERSION: ${{ steps.package-version.outputs.VERSION }}
+        with:
+          github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          script: |
+            github.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Release: v${process.env.VERSION}`,
+              body: `Bump v${process.env.VERSION}`,
+              base: 'main',
+              head: `${context.repo.owner}:release-v${process.env.VERSION}`
+            })
