@@ -79,4 +79,4 @@ jobs:
       - name: Checkout, Merge and Push
         env:
           VERSION: ${{ steps.package-version.outputs.VERSION }}
-        run: git push origin :v${VERSION}
+        run: git push origin :release-v${VERSION}
