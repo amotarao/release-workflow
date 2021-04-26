@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js 14
         uses: actions/setup-node@v2
@@ -25,7 +27,7 @@ jobs:
         id: package-version
         run: echo '::set-output name=VERSION::'$(node -e "console.log(require(\"./package.json\").version)")
 
-      - name: Checkout and Push
+      - name: Checkout and Merge, Push
         env:
           VERSION: ${{ steps.package-version.outputs.VERSION }}
         run: |
