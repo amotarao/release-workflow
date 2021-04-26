@@ -58,3 +58,25 @@ jobs:
           git checkout develop
           git merge origin/release-v${VERSION}
           git push origin develop
+
+  remove-branch:
+    name: Remove Release Branch
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Get Version
+        id: package-version
+        run: echo '::set-output name=VERSION::'$(node -e "console.log(require(\"./package.json\").version)")
+
+      - name: Checkout, Merge and Push
+        env:
+          VERSION: ${{ steps.package-version.outputs.VERSION }}
+        run: git push origin :v${VERSION}
