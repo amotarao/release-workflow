@@ -2,10 +2,11 @@ name: リリース準備
 
 on:
   workflow_dispatch:
-    version:
-      description: major / minor / patch
-      required: true
-      default: patch
+    inputs:
+      version:
+        description: major / minor / patch
+        required: true
+        default: patch
 
 jobs:
   release:
